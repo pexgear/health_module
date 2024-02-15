@@ -2,18 +2,14 @@ template <typename T>
 class HealthModule
 {
     protected:
-		HealthModule()
-		{
-		}
+		HealthModule() {}
 
 		HealthModule(T _max_health)
 		{
 			init(_max_health);
 		}
 
-		~HealthModule()
-		{
-		}
+		~HealthModule() {}
 
 	public:
 		virtual void init(T _max_health)
@@ -29,7 +25,16 @@ class HealthModule
 
 		virtual void set_health(T _health)
 		{
-			set_health_unckecked(health);
+			if (_health < 0.0)
+			{
+				_health = 0.0;
+			}
+
+			if (_health > max_health)
+			{
+				_health = max_health;
+			}
+			set_health_unckecked(_health);
 		}
 
 		virtual T get_health() const
@@ -47,7 +52,12 @@ class HealthModule
 			health = _health;
 		}
 
+		virtual bool is_max_health_valid()
+		{
+			return max_health > 0.0;
+		}		
+
 	private:
-		T max_health = 0.0f;
-		T health = 0.0f;
+		T max_health = 0.0;
+		T health = 0.0;
 };
