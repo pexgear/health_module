@@ -34,7 +34,7 @@ class HealthModule
 			{
 				_health = max_health;
 			}
-			set_health_unckecked(_health);
+			set_health_internal(_health);
 		}
 
 		virtual T get_health() const
@@ -49,13 +49,24 @@ class HealthModule
 
 		virtual void set_health_unckecked(T _health)
 		{
+			set_health_internal(_health);
+		}
+
+		void set_health_internal(T _health)
+		{
 			health = _health;
+			if (health <= 0.0)
+			{
+				on_die();
+			}
 		}
 
 		virtual bool is_max_health_valid()
 		{
 			return max_health > 0.0;
 		}		
+
+		virtual void on_die();
 
 	private:
 		T max_health = 0.0;
